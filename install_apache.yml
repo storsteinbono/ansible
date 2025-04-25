@@ -5,14 +5,16 @@
     - name: Update repository index
       apt:
         update_cache: yes
+      when: ansible_distribution == "Debian"
 
     - name: install apache2
       apt:
         name: apache2
         state: latest
+      when: ansible_distribution == "Debian"
 
     - name: install php support for apache
       apt:
         name: libapache2-mod-php
         state: latest
-
+      when: ansible_distribution == "Debian"
