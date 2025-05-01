@@ -1,7 +1,9 @@
 - hosts: 127.0.0.1
   connection: local
+  become: yes
   vars:
     project_name: "Test-project"
+    ansible_user: "steffen"
   tasks:
 
       - name: Create the Ansible project directory
@@ -11,17 +13,17 @@
           owner: "{{ ansible_user }}"
           group: "{{ ansible_user }}"
           mode: '0755'
-          with_items:
-            - "staging"
-            - "production"
-            - "group_vars"
-            - "host_vars"
-            - "library"
-            - "module_utils"
-            - "filter_plugins"
-            - "lookup_plugins"
+        with_items:
+          - "staging"
+          - "production"
+          - "group_vars"
+          - "host_vars"
+          - "library"
+          - "module_utils"
+          - "filter_plugins"
+          - "lookup_plugins"
 
-            
+
       - name: Create the roles directory and populate it with the default structure
         file:
           path: "/home/ansible/{{ project_name }}/roles/common"
@@ -29,14 +31,14 @@
           owner: "{{ ansible_user }}"
           group: "{{ ansible_user }}"
           mode: '0755'
-          with_items:
-            - "tasks"
-            - "handlers"
-            - "templates"
-            - "files"
-            - "vars"
-            - "defaults"
-            - "meta"
-            - "library"
-            - "module_utils"
-            - "lookup_plugins"
+        with_items:
+          - "tasks"
+          - "handlers"
+          - "templates"
+          - "files"
+          - "vars"
+          - "defaults"
+          - "meta"
+          - "library"
+          - "module_utils"
+          - "lookup_plugins"
