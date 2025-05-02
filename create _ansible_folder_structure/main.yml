@@ -4,16 +4,17 @@
   vars:
     project_name: "Test-project"
     ansible_user: "steffen"
+    base_project_path: "/home/{{ ansible_user }}/ansible"
   tasks:
 
       - name: Create the Ansible project directory
         file:
-          path: "/home/{{ansible_user}}/ansible/{{ project_name }}"
+          path: "{{ base_project_path }}/{{ project_name }}/{{ item }}"
           state: directory
           owner: "{{ ansible_user }}"
           group: "{{ ansible_user }}"
           mode: '0755'
-        with_items:
+        loop:
           - "staging"
           - "production"
           - "group_vars"
@@ -22,23 +23,38 @@
           - "module_utils"
           - "filter_plugins"
           - "lookup_plugins"
-
-
-      - name: Create the roles directory and populate it with the default structure
+          - "/roles/common/handlers"
+          - "/roles/common/templates"
+          - "/roles/common/files"
+          - "/roles/common/vars"
+          - "/roles/common/defaults"
+          - "/roles/common/meta"
+          - "/roles/common/tasks"
+          - "/roles/common/library"
+          - "/roles/common/module_utils"
+          - "/roles/common/lookup_plugins"
+      
+      - name: Create the Ansible template files
         file:
-          path: "/home/{{ ansible_user }}/ansible/{{ project_name }}/roles/common"
-          state: directory
+          path: "{{ base_project_path }}/{{ project_name }}/{{ item }}"
+          state: touch
           owner: "{{ ansible_user }}"
           group: "{{ ansible_user }}"
           mode: '0755'
-        with_items:
-          - "tasks"
-          - "handlers"
-          - "templates"
-          - "files"
-          - "vars"
-          - "defaults"
-          - "meta"
-          - "library"
-          - "module_utils"
-          - "lookup_plugins"
+          force: no
+        loop:
+          - "ansible.cfg"
+          - "staging/inventory"
+          - "production/inventory"
+          - "site.yml"
+          - "host_vars/hostname1.yml"
+          - "host_vars/hostname2.yml"
+          - "group_vars/group1.yml"
+          - "group_vars/group2.yml"
+          - "roles/common/tasks/main.yml"
+          - "roles/common/handlers/main.yml"
+          - "roles/common/templates/ntp.conf.j2"
+          - "roles/common/files/file.txt"
+          - "roles/common/vars/main.yml"
+          - "roles/common/defaults/main.yml"
+          - "roles/common/meta/main.yml"
